@@ -265,7 +265,7 @@ Unauthorized scanning is illegal under IT Act 2000 (India) and similar laws glob
 
 **Ani** — B.Tech Cybersecurity Student, SRHU Dehradun
 - GitHub: [@Rishi0cybertech](https://github.com/Rishi0cybertech)
-- LinkedIn: [Connect](https://linkedin.com/in/Rishi0cybertech)
+- LinkedIn: [Connect](https://www.linkedin.com/in/rishi-gauttam-b1a1b4375)
 
 > *"Dreams are those which make you sleepless."*
 
