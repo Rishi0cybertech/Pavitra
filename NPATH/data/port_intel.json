@@ -1,0 +1,46 @@
+{
+  "22": {
+    "service": "SSH",
+    "why_open": "Remote server access ke liye use hota hai",
+    "who_uses": "System admins, developers",
+    "who_exploits": "Attackers brute force se password guess karte hain",
+    "risk": "Poora server compromise ho sakta hai",
+    "severity": "HIGH",
+    "how_to_fix": [
+      "Root login disable karo",
+      "Password auth band karo, SSH keys use karo",
+      "Default port 22 change karo",
+      "fail2ban install karo"
+    ],
+    "real_world_example": "CVE-2018-15473 - OpenSSH username enumeration"
+  },
+  "5432": {
+    "service": "PostgreSQL",
+    "why_open": "Database server bahar expose ho gaya hai",
+    "who_uses": "Web applications, backend developers",
+    "who_exploits": "Attackers direct database access karte hain weak credentials se",
+    "risk": "Poora database leak — usernames, passwords, sensitive data",
+    "severity": "CRITICAL",
+    "how_to_fix": [
+      "PostgreSQL ko sirf localhost pe bind karo",
+      "pg_hba.conf mein external access band karo",
+      "Strong password set karo postgres user ka",
+      "Public internet pe kabhi expose mat karo"
+    ],
+    "real_world_example": "CVE-2019-9193 - PostgreSQL arbitrary command execution"
+  },
+  "631": {
+    "service": "IPP - Internet Printing Protocol",
+    "why_open": "Printer sharing service chal rahi hai",
+    "who_uses": "Local network printing ke liye",
+    "who_exploits": "Attackers printer via network access karte hain",
+    "risk": "Unauthorized print jobs, network info leak",
+    "severity": "LOW",
+    "how_to_fix": [
+      "Printer service disable karo agar use nahi kar rahe",
+      "Firewall se port 631 block karo externally",
+      "CUPS ko sirf localhost pe bind karo"
+    ],
+    "real_world_example": "CVE-2023-32360 - CUPS unauthorized access vulnerability"
+  }
+}
