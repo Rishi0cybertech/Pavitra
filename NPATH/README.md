@@ -8,6 +8,7 @@
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 [![Tool](https://img.shields.io/badge/Tool-Network%20Scanner-red?style=for-the-badge&logo=linux)](https://github.com/Rishi0cybertech/Pavitra)
 [![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge)]()
+[![CLI](https://img.shields.io/badge/CLI-Working-success?style=for-the-badge&logo=gnubash)]()
 
 > *"NMAP tells you what ports are open. NPath tells you what that actually means."*
 
@@ -130,7 +131,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Step 4 — Install NMAP (if not already installed)
+### Step 4 — Install NMAP
 ```bash
 sudo apt install nmap        # Debian / Ubuntu / Kali
 ```
@@ -139,34 +140,83 @@ sudo apt install nmap        # Debian / Ubuntu / Kali
 
 ## ⚡ Usage
 
-### Scan localhost (your own machine — safe to test)
+NPath now has a fully working CLI. Two ways to run it:
+
+---
+
+### 🖥️ Method 1 — CLI (Recommended)
+
 ```bash
+# Activate virtual environment first
+source venv/bin/activate
+
+# Scan target — terminal output only
+python3 npath.py scan 127.0.0.1
+
+# Scan target — generate PDF report
+python3 npath.py scan 127.0.0.1 --report
+
+# Scan any IP on your network
+python3 npath.py scan 192.168.1.1 --report
+
+# Short flag for report
+python3 npath.py scan 192.168.1.1 -r
+
+# Help menu
+python3 npath.py --help
+```
+
+---
+
+### 📄 Method 2 — Direct Script
+
+```bash
+# Activate virtual environment first
+source venv/bin/activate
+
+# Scan localhost and generate PDF
 python3 test_report.py
 ```
 
-This scans `127.0.0.1` and generates a timestamped PDF report like:
-```
-npath_report_20260625_100826.pdf
-```
+---
 
-### Output in terminal
+### 🖥️ Terminal Output (what you see when scanning)
+
 ```
-╭─────────────────────────────────╮
-│ NPath Scanner v1.0              │
-│ Target : 127.0.0.1              │
-│ Mode   : Service Detection      │
-╰─────────────────────────────────╯
+╭──────────────────────────────────────╮
+│  NPath Scanner v1.0                  │
+│  Target : 127.0.0.1                  │
+│  Mode   : Service Detection          │
+╰──────────────────────────────────────╯
 
 ⠋ Scanning target...
 ✔ Scan complete!
 
-Host  : 127.0.0.1 (localhost)
-State : up
+Host    : 127.0.0.1 (localhost)
+State   : up
 
-  PORT 631/tcp [LOW] ipp 2.4
+  PORT 631/tcp  [LOW]  ipp  2.4
 
-[✓] Report saved: npath_report_20260625_100826.pdf
+[✓] Report saved: npath_report_20260626_172300.pdf
 ```
+
+---
+
+### 📑 PDF Report Output
+
+Every scan generates a **new timestamped PDF** — no overwriting:
+
+```
+npath_report_20260626_172300.pdf
+npath_report_20260626_183500.pdf
+```
+
+Each PDF contains:
+- Full scan summary with severity counts
+- Per-port intelligence breakdown
+- Step-by-step fix instructions
+- Real CVE references
+- NMAP learning section
 
 ---
 
@@ -177,13 +227,16 @@ NPATH/
 ├── core/
 │   ├── scanner.py        # NMAP wrapper + real-time terminal UI
 │   ├── reporter.py       # Professional PDF generator
-│   └── analyzer.py       # Risk scoring engine (coming soon)
+│   └── analyzer.py       # Risk scoring engine
 ├── data/
 │   └── port_intel.json   # Port knowledge database (why/who/risk/fix/CVE)
-├── test_report.py        # Run this to scan and generate PDF
-├── npath.py              # CLI entry point (coming soon)
+├── screenshots/
+│   ├── terminal_ui.png   # Terminal scan UI preview
+│   └── report_preview.png # PDF report preview
+├── npath.py              # ✅ Working CLI entry point
+├── test_report.py        # Direct scan + PDF script
 ├── requirements.txt      # Python dependencies
-└── README.md             # This file
+└── README.md
 ```
 
 ---
@@ -226,7 +279,7 @@ Current coverage:
 python-nmap     — NMAP Python wrapper
 reportlab       — Professional PDF generation
 rich            — Beautiful terminal output
-typer           — CLI interface (coming soon)
+typer           — CLI interface
 ```
 
 ---
@@ -240,9 +293,9 @@ typer           — CLI interface (coming soon)
 - [x] Port intelligence database with real CVEs
 - [x] Learning section in PDF — teaches NMAP concepts
 - [x] Unique timestamped PDF per scan
-- [ ] Full CLI — `npath scan <target> --report`
+- [x] Working CLI — `python3 npath.py scan <target> --report`
 - [ ] Port intel database expanded to 18+ ports
-- [ ] Subnet scanning — `npath scan 192.168.1.0/24`
+- [ ] Subnet scanning — `python3 npath.py scan 192.168.1.0/24 --report`
 - [ ] OS detection section in report
 - [ ] HTML report export option
 - [ ] Auto-update CVE database from NVD API
@@ -261,13 +314,24 @@ Unauthorized scanning is illegal under IT Act 2000 (India) and similar laws glob
 
 ---
 
-## 👨‍💻 Author
+## 👨‍💻 About The Author
 
-**Ani** — B.Tech Cybersecurity Student, SRHU Dehradun
-- GitHub: [@Rishi0cybertech](https://github.com/Rishi0cybertech)
-- LinkedIn: [Connect](https://www.linkedin.com/in/rishi-gauttam-b1a1b4375)
+**Rishi Gauttam** — B.Tech Cybersecurity, SRHU Dehradun
+
+I am Rishi Gauttam, a 2nd year B.Tech Cybersecurity student at Swami Rama Himalayan University, Dehradun. I joined SRHU with one goal — to build things that actually matter.
+
+In my first year itself, I co-invented two patents — D-VISS (Patent No. 202611029490A), a decentralized vehicular safety system, and CellVeda (Patent No. 202611045822), an AI-adaptive battery desulfation system. CellVeda is now selected for the STPI Startup Program through SRHU's ACIC SIIC incubator, with funding approved and prototyping actively underway.
+
+As an active member of the SRHU ACM Student Chapter, I have served as a host and contributed to event management — helping organize and run technical events for the student community.
+
+Beyond academics, I founded Nexbuild Labs, run a YouTube channel called Tech with Rishi, and maintain 500+ LinkedIn connections across the cybersecurity and startup ecosystem.
+
+I build at the intersection of cybersecurity, IoT, and embedded systems — one patent, one tool, one problem at a time.
 
 > *"Dreams are those which make you sleepless."*
+
+- 🐙 GitHub: [@Rishi0cybertech](https://github.com/Rishi0cybertech)
+- 💼 LinkedIn: [Rishi Gauttam](https://www.linkedin.com/in/rishi-gauttam-b1a1b4375)
 
 ---
 
