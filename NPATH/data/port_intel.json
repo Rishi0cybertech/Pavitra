@@ -1,46 +1,192 @@
 {
   "22": {
-    "service": "SSH",
-    "why_open": "Remote server access ke liye use hota hai",
-    "who_uses": "System admins, developers",
-    "who_exploits": "Attackers brute force se password guess karte hain",
-    "risk": "Poora server compromise ho sakta hai",
+    "service": "SSH — Secure Shell",
+    "why_open": "Provides encrypted remote access to the server for administrative tasks",
+    "who_uses": "System administrators, developers, and DevOps engineers for remote login",
+    "who_exploits": "Attackers using brute-force tools, credential stuffing, or stolen private keys",
+    "risk": "Full remote compromise of the system — attacker gains complete shell access",
     "severity": "HIGH",
     "how_to_fix": [
-      "Root login disable karo",
-      "Password auth band karo, SSH keys use karo",
-      "Default port 22 change karo",
-      "fail2ban install karo"
+      "Disable root login: set PermitRootLogin no in /etc/ssh/sshd_config",
+      "Disable password authentication — enforce SSH key-based login only",
+      "Change the default port from 22 to a non-standard port above 1024",
+      "Install and configure fail2ban to block brute-force attempts automatically",
+      "Restrict SSH access to specific IP addresses using firewall rules"
     ],
-    "real_world_example": "CVE-2018-15473 - OpenSSH username enumeration"
+    "real_world_example": "CVE-2018-15473 — OpenSSH 7.7 username enumeration vulnerability exploited in targeted attacks"
   },
-  "5432": {
-    "service": "PostgreSQL",
-    "why_open": "Database server bahar expose ho gaya hai",
-    "who_uses": "Web applications, backend developers",
-    "who_exploits": "Attackers direct database access karte hain weak credentials se",
-    "risk": "Poora database leak — usernames, passwords, sensitive data",
+  "21": {
+    "service": "FTP — File Transfer Protocol",
+    "why_open": "Allows file transfers between client and server over a network",
+    "who_uses": "Web developers uploading files, legacy systems performing automated transfers",
+    "who_exploits": "Attackers performing anonymous login attempts, credential sniffing, and bounce attacks",
+    "risk": "Credentials and file contents transmitted in plaintext — full interception possible",
     "severity": "CRITICAL",
     "how_to_fix": [
-      "PostgreSQL ko sirf localhost pe bind karo",
-      "pg_hba.conf mein external access band karo",
-      "Strong password set karo postgres user ka",
-      "Public internet pe kabhi expose mat karo"
+      "Disable FTP entirely and replace with SFTP (SSH File Transfer Protocol)",
+      "If FTP is required, enforce FTPS (FTP over TLS) for encrypted transport",
+      "Disable anonymous FTP login in the server configuration",
+      "Restrict FTP access to specific IP addresses via firewall rules",
+      "Audit all files accessible via FTP and remove sensitive data"
     ],
-    "real_world_example": "CVE-2019-9193 - PostgreSQL arbitrary command execution"
+    "real_world_example": "CVE-2011-2523 — vsftpd 2.3.4 backdoor allowing remote command execution on port 6200"
   },
-  "631": {
-    "service": "IPP - Internet Printing Protocol",
-    "why_open": "Printer sharing service chal rahi hai",
-    "who_uses": "Local network printing ke liye",
-    "who_exploits": "Attackers printer via network access karte hain",
-    "risk": "Unauthorized print jobs, network info leak",
+  "23": {
+    "service": "Telnet — Unencrypted Remote Access",
+    "why_open": "Legacy remote administration protocol — predates SSH",
+    "who_uses": "Legacy network devices, embedded systems, and outdated server configurations",
+    "who_exploits": "Attackers performing man-in-the-middle attacks and credential sniffing on the network",
+    "risk": "All data including usernames and passwords transmitted in cleartext — trivially interceptable",
+    "severity": "CRITICAL",
+    "how_to_fix": [
+      "Disable Telnet immediately — there is no valid justification for its use in 2024",
+      "Replace with SSH for all remote administration requirements",
+      "Block port 23 on all network firewalls without exception",
+      "Audit all devices still running Telnet and schedule immediate replacement"
+    ],
+    "real_world_example": "CVE-2020-10188 — Telnet server vulnerability in multiple network device firmware allowing remote code execution"
+  },
+  "25": {
+    "service": "SMTP — Simple Mail Transfer Protocol",
+    "why_open": "Mail server accepting or relaying outbound email messages",
+    "who_uses": "Mail servers, web applications sending transactional email, internal mail relays",
+    "who_exploits": "Spammers using open relays, attackers probing for mail server misconfigurations",
+    "risk": "Open relay exploitation allowing the server to send spam globally — potential blacklisting and reputational damage",
+    "severity": "HIGH",
+    "how_to_fix": [
+      "Disable open relay — restrict SMTP to authenticated users only",
+      "Implement SPF, DKIM, and DMARC DNS records to prevent spoofing",
+      "Use port 587 (submission) with STARTTLS for authenticated outbound mail",
+      "Monitor SMTP logs for unusual sending volumes or patterns",
+      "Block port 25 inbound on servers that do not need to receive mail directly"
+    ],
+    "real_world_example": "CVE-2020-7247 — OpenSMTPD remote code execution vulnerability allowing arbitrary command execution as root"
+  },
+  "80": {
+    "service": "HTTP — Hypertext Transfer Protocol",
+    "why_open": "Web server serving unencrypted HTTP traffic on the standard web port",
+    "who_uses": "Web browsers, web crawlers, API clients accessing web content",
+    "who_exploits": "Attackers intercepting unencrypted traffic, performing injection attacks, and exploiting web application vulnerabilities",
+    "risk": "All data transmitted in plaintext — session tokens, credentials, and content fully exposed to interception",
+    "severity": "MEDIUM",
+    "how_to_fix": [
+      "Redirect all HTTP traffic to HTTPS using a permanent 301 redirect",
+      "Obtain and install a valid TLS certificate (Let's Encrypt provides free certificates)",
+      "Enable HTTP Strict Transport Security (HSTS) to prevent downgrade attacks",
+      "Disable HTTP entirely if all clients support HTTPS",
+      "Keep web server software (Apache, Nginx) updated to the latest stable version"
+    ],
+    "real_world_example": "CVE-2021-41773 — Apache HTTP Server 2.4.49 path traversal vulnerability enabling remote code execution"
+  },
+  "443": {
+    "service": "HTTPS — HTTP over TLS",
+    "why_open": "Encrypted web server traffic — standard port for secure web communication",
+    "who_uses": "Web browsers and API clients for all secure web communication",
+    "who_exploits": "Attackers targeting outdated TLS versions, weak cipher suites, or misconfigured certificates",
+    "risk": "Misconfigured TLS can expose traffic to decryption; expired certificates cause service disruption and user warnings",
     "severity": "LOW",
     "how_to_fix": [
-      "Printer service disable karo agar use nahi kar rahe",
-      "Firewall se port 631 block karo externally",
-      "CUPS ko sirf localhost pe bind karo"
+      "Disable TLS 1.0 and TLS 1.1 — enforce TLS 1.2 minimum, prefer TLS 1.3",
+      "Disable weak cipher suites — use only AEAD ciphers (AES-GCM, ChaCha20-Poly1305)",
+      "Enable HSTS with a minimum max-age of 31536000 seconds",
+      "Monitor certificate expiry and automate renewal with certbot or equivalent",
+      "Run regular TLS configuration audits using testssl.sh or SSL Labs"
     ],
-    "real_world_example": "CVE-2023-32360 - CUPS unauthorized access vulnerability"
+    "real_world_example": "CVE-2014-0160 — OpenSSL Heartbleed vulnerability exposing server memory contents including private keys"
+  },
+  "3306": {
+    "service": "MySQL — Database Server",
+    "why_open": "MySQL database server accepting connections — potentially exposed to the network",
+    "who_uses": "Web applications, backend services, and database administrators",
+    "who_exploits": "Attackers attempting credential brute-force and direct database access from the internet",
+    "risk": "Direct database access from the network — complete data exfiltration, modification, or destruction",
+    "severity": "CRITICAL",
+    "how_to_fix": [
+      "Bind MySQL to localhost only: set bind-address = 127.0.0.1 in my.cnf",
+      "Never expose port 3306 to the public internet under any circumstances",
+      "Use strong, unique passwords for all database accounts",
+      "Remove anonymous accounts and the test database immediately",
+      "Access the database remotely via SSH tunnel rather than direct port exposure"
+    ],
+    "real_world_example": "CVE-2012-2122 — MySQL authentication bypass allowing login with any password under certain conditions"
+  },
+  "5432": {
+    "service": "PostgreSQL — Database Server",
+    "why_open": "PostgreSQL database server accepting network connections",
+    "who_uses": "Web applications, data pipelines, and backend services requiring relational data storage",
+    "who_exploits": "Attackers targeting exposed database ports for credential attacks and direct data access",
+    "risk": "Full database compromise — all stored data accessible, modifiable, or deletable by an unauthorized party",
+    "severity": "CRITICAL",
+    "how_to_fix": [
+      "Restrict PostgreSQL to localhost: set listen_addresses = 'localhost' in postgresql.conf",
+      "Configure pg_hba.conf to reject all connections from non-local addresses",
+      "Use strong passwords for all PostgreSQL roles — enforce password policies",
+      "Never expose PostgreSQL directly to the internet — use SSH tunneling for remote access",
+      "Enable SSL for all PostgreSQL connections even on internal networks"
+    ],
+    "real_world_example": "CVE-2019-9193 — PostgreSQL COPY TO/FROM PROGRAM feature enabling arbitrary OS command execution"
+  },
+  "631": {
+    "service": "IPP — Internet Printing Protocol (CUPS)",
+    "why_open": "CUPS print server running and accepting print job submissions over the network",
+    "who_uses": "Local network devices and users submitting print jobs to shared printers",
+    "who_exploits": "Attackers sending malicious print jobs or exploiting CUPS vulnerabilities to achieve code execution",
+    "risk": "Information disclosure, unauthorized print job submission, and potential remote code execution via CUPS exploits",
+    "severity": "LOW",
+    "how_to_fix": [
+      "Disable CUPS if no printing functionality is required on this machine",
+      "Restrict CUPS to localhost only: set Listen localhost:631 in /etc/cups/cupsd.conf",
+      "Block port 631 on the external network interface via firewall rules",
+      "Keep CUPS updated to the latest version to patch known vulnerabilities"
+    ],
+    "real_world_example": "CVE-2023-32360 — CUPS unauthorized access vulnerability allowing retrieval of sensitive information"
+  },
+  "3389": {
+    "service": "RDP — Remote Desktop Protocol",
+    "why_open": "Windows Remote Desktop service accepting connections for graphical remote access",
+    "who_uses": "System administrators and remote workers accessing Windows desktops remotely",
+    "who_exploits": "Ransomware operators, nation-state actors, and automated scanners targeting exposed RDP for initial access",
+    "risk": "One of the most exploited entry points for ransomware — full graphical desktop access upon successful authentication",
+    "severity": "CRITICAL",
+    "how_to_fix": [
+      "Never expose RDP directly to the internet — place behind a VPN",
+      "Enable Network Level Authentication (NLA) to require credentials before session establishment",
+      "Change the default RDP port from 3389 to a non-standard port",
+      "Implement account lockout policies to prevent brute-force attacks",
+      "Enable RDP logging and monitor for failed authentication attempts"
+    ],
+    "real_world_example": "CVE-2019-0708 — BlueKeep, a wormable RDP vulnerability enabling unauthenticated remote code execution on Windows 7 and Server 2008"
+  },
+  "445": {
+    "service": "SMB — Server Message Block",
+    "why_open": "Windows file sharing and network communication protocol",
+    "who_uses": "Windows networks for file sharing, printer sharing, and inter-process communication",
+    "who_exploits": "Ransomware (WannaCry, NotPetya), worms, and attackers exploiting EternalBlue and related vulnerabilities",
+    "risk": "Wormable exploitation enabling lateral movement, ransomware deployment, and complete network compromise",
+    "severity": "CRITICAL",
+    "how_to_fix": [
+      "Block port 445 at the network perimeter — never expose SMB to the internet",
+      "Disable SMBv1 immediately: Set-SmbServerConfiguration -EnableSMB1Protocol $false",
+      "Apply MS17-010 patch if not already applied — eliminates EternalBlue attack vector",
+      "Require SMB signing to prevent man-in-the-middle attacks on internal networks",
+      "Segment the network to limit SMB exposure between untrusted hosts"
+    ],
+    "real_world_example": "CVE-2017-0144 — EternalBlue SMBv1 vulnerability exploited by WannaCry ransomware affecting 200,000+ systems globally"
+  },
+  "8080": {
+    "service": "HTTP Alternate — Development or Proxy Web Server",
+    "why_open": "Secondary web server or reverse proxy commonly used for development environments or application servers",
+    "who_uses": "Developers running local servers, Tomcat application servers, and HTTP proxy configurations",
+    "who_exploits": "Attackers targeting development servers with weaker security configurations than production environments",
+    "risk": "Development servers often lack authentication, expose debug endpoints, and run with elevated privileges",
+    "severity": "MEDIUM",
+    "how_to_fix": [
+      "Do not expose development servers to the public internet",
+      "Require authentication on all web interfaces running on port 8080",
+      "Disable debug endpoints and verbose error messages in any internet-facing deployment",
+      "Use a reverse proxy (Nginx, Apache) in front of application servers",
+      "Apply the same security standards to development servers as production"
+    ],
+    "real_world_example": "CVE-2020-1938 — Apache Tomcat AJP connector vulnerability (Ghostcat) enabling file read and remote code execution"
   }
 }
