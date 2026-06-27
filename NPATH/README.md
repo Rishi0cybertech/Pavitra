@@ -9,10 +9,21 @@
 [![Tool](https://img.shields.io/badge/Tool-Network%20Scanner-red?style=for-the-badge&logo=linux)](https://github.com/Rishi0cybertech/Pavitra)
 [![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge)]()
 [![CLI](https://img.shields.io/badge/CLI-Working-success?style=for-the-badge&logo=gnubash)]()
+[![Ports](https://img.shields.io/badge/Port%20Intel-12%20Ports-blue?style=for-the-badge)]()
 
 > *"NMAP tells you what ports are open. NPath tells you what that actually means."*
 
 </div>
+
+---
+
+## 📸 Screenshots
+
+### Terminal UI — Real-time Scan Output
+![NPath Terminal UI](NPATH/screenshots/terminal_ui.png)
+
+### PDF Report — Professional Output
+![NPath PDF Report](NPATH/screenshots/report_preview.png)
 
 ---
 
@@ -62,10 +73,6 @@ Here is what NPath found on `localhost (127.0.0.1)`:
 | 631/tcp | IPP — Internet Printing Protocol (CUPS 2.4) | 🟢 LOW | Printer sharing service running in background |
 | 5432/tcp | PostgreSQL Database | 🔴 CRITICAL | Database server exposed — shut down immediately |
 
-**NPath PDF report explained:**
-- Port 631 → LOW risk, printer service, safe on local network
-- Port 5432 → CRITICAL, database exposed, fix: bind to localhost only
-
 > ✅ After running NPath, PostgreSQL was identified and disabled — open ports reduced from 2 to 1.
 
 ---
@@ -81,7 +88,6 @@ Every generated PDF includes:
 - Count of CRITICAL / HIGH / MEDIUM / LOW issues
 
 ### 2. Per-Port Intelligence Section
-For every open port, NPath explains:
 
 | Field | What It Tells You |
 |-------|------------------|
@@ -94,7 +100,6 @@ For every open port, NPath explains:
 | **Version Detected** | Exact software version found |
 
 ### 3. Learning Section — How NPath Scanned This Target
-NPath teaches you NMAP while it works:
 
 | Concept | Explanation |
 |---------|------------|
@@ -102,7 +107,7 @@ NPath teaches you NMAP while it works:
 | `-sV` flag | Detects service version behind each port |
 | `--open` flag | Shows only open ports, ignores filtered/closed |
 | TCP Handshake | SYN → SYN-ACK → ACK explained |
-| Port States | Open vs Closed vs Filtered — what each means |
+| Port States | Open vs Closed vs Filtered |
 | 127.0.0.1 | Loopback address — scanning yourself safely |
 
 ---
@@ -140,7 +145,7 @@ sudo apt install nmap        # Debian / Ubuntu / Kali
 
 ## ⚡ Usage
 
-NPath now has a fully working CLI. Two ways to run it:
+NPath has a fully working CLI. Two ways to run it:
 
 ---
 
@@ -171,16 +176,13 @@ python3 npath.py --help
 ### 📄 Method 2 — Direct Script
 
 ```bash
-# Activate virtual environment first
 source venv/bin/activate
-
-# Scan localhost and generate PDF
 python3 test_report.py
 ```
 
 ---
 
-### 🖥️ Terminal Output (what you see when scanning)
+### 🖥️ Terminal Output
 
 ```
 ╭──────────────────────────────────────╮
@@ -197,26 +199,8 @@ State   : up
 
   PORT 631/tcp  [LOW]  ipp  2.4
 
-[✓] Report saved: npath_report_20260626_172300.pdf
+[✓] Report saved: npath_report_20260627_082855.pdf
 ```
-
----
-
-### 📑 PDF Report Output
-
-Every scan generates a **new timestamped PDF** — no overwriting:
-
-```
-npath_report_20260626_172300.pdf
-npath_report_20260626_183500.pdf
-```
-
-Each PDF contains:
-- Full scan summary with severity counts
-- Per-port intelligence breakdown
-- Step-by-step fix instructions
-- Real CVE references
-- NMAP learning section
 
 ---
 
@@ -229,7 +213,7 @@ NPATH/
 │   ├── reporter.py       # Professional PDF generator
 │   └── analyzer.py       # Risk scoring engine
 ├── data/
-│   └── port_intel.json   # Port knowledge database (why/who/risk/fix/CVE)
+│   └── port_intel.json   # Port knowledge database (12 ports with CVEs)
 ├── screenshots/
 │   ├── terminal_ui.png   # Terminal scan UI preview
 │   └── report_preview.png # PDF report preview
@@ -245,15 +229,24 @@ NPATH/
 
 NPath maintains a `port_intel.json` database — the brain of the tool.
 
-Current coverage:
+Current coverage — **12 ports with real CVE references:**
 
 | Port | Service | Severity |
 |------|---------|----------|
-| 22 | SSH | 🟠 HIGH |
-| 631 | IPP / CUPS | 🟢 LOW |
-| 5432 | PostgreSQL | 🔴 CRITICAL |
+| 21 | FTP — File Transfer Protocol | 🔴 CRITICAL |
+| 22 | SSH — Secure Shell | 🟠 HIGH |
+| 23 | Telnet — Unencrypted Remote Access | 🔴 CRITICAL |
+| 25 | SMTP — Simple Mail Transfer Protocol | 🟠 HIGH |
+| 80 | HTTP — Hypertext Transfer Protocol | 🟡 MEDIUM |
+| 443 | HTTPS — HTTP over TLS | 🟢 LOW |
+| 445 | SMB — Server Message Block | 🔴 CRITICAL |
+| 631 | IPP — Internet Printing Protocol (CUPS) | 🟢 LOW |
+| 3306 | MySQL — Database Server | 🔴 CRITICAL |
+| 3389 | RDP — Remote Desktop Protocol | 🔴 CRITICAL |
+| 5432 | PostgreSQL — Database Server | 🔴 CRITICAL |
+| 8080 | HTTP Alternate — Development/Proxy Server | 🟡 MEDIUM |
 
-> Database is actively expanding — contributions welcome.
+> Database actively expanding — contributions welcome.
 
 ### Database Schema
 ```json
@@ -294,7 +287,9 @@ typer           — CLI interface
 - [x] Learning section in PDF — teaches NMAP concepts
 - [x] Unique timestamped PDF per scan
 - [x] Working CLI — `python3 npath.py scan <target> --report`
-- [ ] Port intel database expanded to 18+ ports
+- [x] Port intel database expanded to 12 ports
+- [x] Company-grade professional PDF layout
+- [ ] Port intel expanded to 20+ ports
 - [ ] Subnet scanning — `python3 npath.py scan 192.168.1.0/24 --report`
 - [ ] OS detection section in report
 - [ ] HTML report export option
