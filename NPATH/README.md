@@ -20,10 +20,13 @@
 ## 📸 Screenshots
 
 ### Terminal UI — Real-time Scan Output
-![NPath Terminal UI](NPATH/screenshots/terminal_ui.png)
+![NPath Terminal UI](screenshots/terminal_ui.png)
 
-### PDF Report — Professional Output
-![NPath PDF Report](NPATH/screenshots/report_preview.png)
+### PDF Report — Page 1
+![NPath PDF Report Page 1](screenshots/report_page1.png)
+
+### PDF Report — Page 2
+![NPath PDF Report Page 2](screenshots/report_page2.png)
 
 ---
 
@@ -57,6 +60,8 @@ NPath scans the target using NMAP internally
         ↓
 Every open port is matched against the intelligence database
         ↓
+Risk score calculated automatically
+        ↓
 A timestamped PDF report is generated with full explanation
         ↓
 You actually understand your network
@@ -87,7 +92,13 @@ Every generated PDF includes:
 - Total open ports found
 - Count of CRITICAL / HIGH / MEDIUM / LOW issues
 
-### 2. Per-Port Intelligence Section
+### 2. Risk Score & Grade
+- Overall risk score out of 100
+- Grade: A / B / C / D / F
+- Risk level: LOW RISK → SEVERE RISK
+- Ports sorted by severity — most critical first
+
+### 3. Per-Port Intelligence Section
 
 | Field | What It Tells You |
 |-------|------------------|
@@ -99,7 +110,7 @@ Every generated PDF includes:
 | **Real World CVE** | Actual vulnerability reference |
 | **Version Detected** | Exact software version found |
 
-### 3. Learning Section — How NPath Scanned This Target
+### 4. Learning Section — How NPath Scanned This Target
 
 | Concept | Explanation |
 |---------|------------|
@@ -199,7 +210,7 @@ State   : up
 
   PORT 631/tcp  [LOW]  ipp  2.4
 
-[✓] Report saved: npath_report_20260627_082855.pdf
+[✓] Report saved: npath_report_20260629_090000.pdf
 ```
 
 ---
@@ -211,12 +222,13 @@ NPATH/
 ├── core/
 │   ├── scanner.py        # NMAP wrapper + real-time terminal UI
 │   ├── reporter.py       # Professional PDF generator
-│   └── analyzer.py       # Risk scoring engine
+│   └── analyzer.py       # Risk scoring + port prioritization engine
 ├── data/
 │   └── port_intel.json   # Port knowledge database (12 ports with CVEs)
 ├── screenshots/
 │   ├── terminal_ui.png   # Terminal scan UI preview
-│   └── report_preview.png # PDF report preview
+│   ├── report_page1.png  # PDF report page 1 preview
+│   └── report_page2.png  # PDF report page 2 preview
 ├── npath.py              # ✅ Working CLI entry point
 ├── test_report.py        # Direct scan + PDF script
 ├── requirements.txt      # Python dependencies
@@ -289,6 +301,8 @@ typer           — CLI interface
 - [x] Working CLI — `python3 npath.py scan <target> --report`
 - [x] Port intel database expanded to 12 ports
 - [x] Company-grade professional PDF layout
+- [x] Risk scoring engine — grade A to F
+- [x] Port prioritization — critical ports first
 - [ ] Port intel expanded to 20+ ports
 - [ ] Subnet scanning — `python3 npath.py scan 192.168.1.0/24 --report`
 - [ ] OS detection section in report
@@ -306,27 +320,6 @@ NPath is built strictly for:
 
 **Never scan networks or systems without explicit written permission.**
 Unauthorized scanning is illegal under IT Act 2000 (India) and similar laws globally.
-
----
-
-## 👨‍💻 About The Author
-
-**Rishi Gauttam** — B.Tech Cybersecurity, SRHU Dehradun
-
-I am Rishi Gauttam, a 2nd year B.Tech Cybersecurity student at Swami Rama Himalayan University, Dehradun. I joined SRHU with one goal — to build things that actually matter.
-
-In my first year itself, I co-invented two patents — D-VISS (Patent No. 202611029490A), a decentralized vehicular safety system, and CellVeda (Patent No. 202611045822), an AI-adaptive battery desulfation system. CellVeda is now selected for the STPI Startup Program through SRHU's ACIC SIIC incubator, with funding approved and prototyping actively underway.
-
-As an active member of the SRHU ACM Student Chapter, I have served as a host and contributed to event management — helping organize and run technical events for the student community.
-
-Beyond academics, I founded Nexbuild Labs, run a YouTube channel called Tech with Rishi, and maintain 500+ LinkedIn connections across the cybersecurity and startup ecosystem.
-
-I build at the intersection of cybersecurity, IoT, and embedded systems — one patent, one tool, one problem at a time.
-
-> *"Dreams are those which make you sleepless."*
-
-- 🐙 GitHub: [@Rishi0cybertech](https://github.com/Rishi0cybertech)
-- 💼 LinkedIn: [Rishi Gauttam](https://www.linkedin.com/in/rishi-gauttam-b1a1b4375)
 
 ---
 
