@@ -309,22 +309,6 @@ Unauthorized scanning is illegal under IT Act 2000 (India) and similar laws glob
 
 ---
 
-## 👨‍💻 About The Author
-
-**Rishi Gauttam** — B.Tech Cybersecurity, SRHU Dehradun
-
-I am Rishi Gauttam, a 2nd year B.Tech Cybersecurity student at Swami Rama Himalayan University, Dehradun. I joined SRHU with one goal — to build things that actually matter.
-
-In my first year itself, I co-invented two patents — D-VISS (Patent No. 202611029490A), a decentralized vehicular safety system, and CellVeda (Patent No. 202611045822), an AI-adaptive battery desulfation system. CellVeda is now selected for the STPI Startup Program through SRHU's ACIC SIIC incubator, with funding approved and prototyping actively underway.
-
-As an active member of the SRHU ACM Student Chapter, I have served as a host and contributed to event management — helping organize and run technical events for the student community.
-
-Beyond academics, I founded Nexbuild Labs, run a YouTube channel called Tech with Rishi, and maintain 500+ LinkedIn connections across the cybersecurity and startup ecosystem.
-
-I build at the intersection of cybersecurity, IoT, and embedded systems — one patent, one tool, one problem at a time.
-
-> *"Dreams are those which make you sleepless."*
-
 - 🐙 GitHub: [@Rishi0cybertech](https://github.com/Rishi0cybertech)
 - 💼 LinkedIn: [Rishi Gauttam](https://www.linkedin.com/in/rishi-gauttam-b1a1b4375)
 
