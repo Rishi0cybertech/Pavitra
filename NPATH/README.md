@@ -9,7 +9,7 @@
 [![Tool](https://img.shields.io/badge/Tool-Network%20Scanner-red?style=for-the-badge&logo=linux)](https://github.com/Rishi0cybertech/Pavitra)
 [![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge)]()
 [![CLI](https://img.shields.io/badge/CLI-Working-success?style=for-the-badge&logo=gnubash)]()
-[![Ports](https://img.shields.io/badge/Port%20Intel-12%20Ports-blue?style=for-the-badge)]()
+[![Ports](https://img.shields.io/badge/Port%20Intel-18%20Ports-blue?style=for-the-badge)]()
 
 > *"NMAP tells you what ports are open. NPath tells you what that actually means."*
 
@@ -51,7 +51,7 @@ NMAP gives you data. **NPath gives you answers.**
 
 ## ✨ What NPath Does
 
-NPath wraps NMAP and automatically converts raw scan output into a **clean, professional PDF report** that explains every open port in plain English — what it is, why it is dangerous, who exploits it, and exactly how to fix it.
+NPath builds an intelligence layer on top of NMAP, automatically converting raw scan output into a **clean, professional PDF report** that explains every open port in plain English — what it is, why it is dangerous, who exploits it, and exactly how to fix it.
 
 ```
 You run one command
@@ -210,7 +210,7 @@ State   : up
 
   PORT 631/tcp  [LOW]  ipp  2.4
 
-[✓] Report saved: npath_report_20260629_090000.pdf
+[✓] Report saved: npath_report_20260630_090000.pdf
 ```
 
 ---
@@ -224,7 +224,7 @@ NPATH/
 │   ├── reporter.py       # Professional PDF generator
 │   └── analyzer.py       # Risk scoring + port prioritization engine
 ├── data/
-│   └── port_intel.json   # Port knowledge database (12 ports with CVEs)
+│   └── port_intel.json   # Port knowledge database (18 ports with CVEs)
 ├── screenshots/
 │   ├── terminal_ui.png   # Terminal scan UI preview
 │   ├── report_page1.png  # PDF report page 1 preview
@@ -241,7 +241,7 @@ NPATH/
 
 NPath maintains a `port_intel.json` database — the brain of the tool.
 
-Current coverage — **12 ports with real CVE references:**
+Current coverage — **18 ports with real CVE references:**
 
 | Port | Service | Severity |
 |------|---------|----------|
@@ -249,14 +249,20 @@ Current coverage — **12 ports with real CVE references:**
 | 22 | SSH — Secure Shell | 🟠 HIGH |
 | 23 | Telnet — Unencrypted Remote Access | 🔴 CRITICAL |
 | 25 | SMTP — Simple Mail Transfer Protocol | 🟠 HIGH |
+| 53 | DNS — Domain Name System | 🟠 HIGH |
 | 80 | HTTP — Hypertext Transfer Protocol | 🟡 MEDIUM |
+| 110 | POP3 — Post Office Protocol v3 | 🟠 HIGH |
+| 139 | NetBIOS — Network Basic Input Output System | 🟡 MEDIUM |
+| 143 | IMAP — Internet Message Access Protocol | 🟠 HIGH |
 | 443 | HTTPS — HTTP over TLS | 🟢 LOW |
 | 445 | SMB — Server Message Block | 🔴 CRITICAL |
 | 631 | IPP — Internet Printing Protocol (CUPS) | 🟢 LOW |
 | 3306 | MySQL — Database Server | 🔴 CRITICAL |
 | 3389 | RDP — Remote Desktop Protocol | 🔴 CRITICAL |
 | 5432 | PostgreSQL — Database Server | 🔴 CRITICAL |
+| 5900 | VNC — Virtual Network Computing | 🔴 CRITICAL |
 | 8080 | HTTP Alternate — Development/Proxy Server | 🟡 MEDIUM |
+| 8443 | HTTPS Alternate — Secure Admin Interface | 🟡 MEDIUM |
 
 > Database actively expanding — contributions welcome.
 
@@ -281,7 +287,7 @@ Current coverage — **12 ports with real CVE references:**
 ## 📦 Dependencies
 
 ```
-python-nmap     — NMAP Python wrapper
+python-nmap     — NMAP Python interface
 reportlab       — Professional PDF generation
 rich            — Beautiful terminal output
 typer           — CLI interface
@@ -289,7 +295,7 @@ typer           — CLI interface
 
 ---
 
-## 🗺️ Roadmap
+## ✅ Completed So Far
 
 - [x] Core scanner with NMAP wrapper
 - [x] Professional PDF report generation
@@ -299,15 +305,21 @@ typer           — CLI interface
 - [x] Learning section in PDF — teaches NMAP concepts
 - [x] Unique timestamped PDF per scan
 - [x] Working CLI — `python3 npath.py scan <target> --report`
-- [x] Port intel database expanded to 12 ports
+- [x] Port intel database expanded to 18 ports
 - [x] Company-grade professional PDF layout
 - [x] Risk scoring engine — grade A to F
 - [x] Port prioritization — critical ports first
-- [ ] Port intel expanded to 20+ ports
+
+---
+
+## 🗺️ Roadmap — What's Coming Next
+
 - [ ] Subnet scanning — `python3 npath.py scan 192.168.1.0/24 --report`
 - [ ] OS detection section in report
 - [ ] HTML report export option
 - [ ] Auto-update CVE database from NVD API
+- [ ] Integration with WaveTrace — cross-reference open ports with live traffic
+- [ ] DRISHTI AI integration — Hindi + English explanations
 
 ---
 
@@ -337,8 +349,8 @@ If you find a port that should be in the database — submit it with:
 
 <div align="center">
 
+**Part of the Pavitra Security Suite.**
 **Built by a student, for students.**
-**Learn networking by actually scanning.**
 
 ⭐ Star this repo if NPath helped you understand your network better.
 
