@@ -1,20 +1,4 @@
 {
-  "22": {
-    "service": "SSH — Secure Shell",
-    "why_open": "Provides encrypted remote access to the server for administrative tasks",
-    "who_uses": "System administrators, developers, and DevOps engineers for remote login",
-    "who_exploits": "Attackers using brute-force tools, credential stuffing, or stolen private keys",
-    "risk": "Full remote compromise of the system — attacker gains complete shell access",
-    "severity": "HIGH",
-    "how_to_fix": [
-      "Disable root login: set PermitRootLogin no in /etc/ssh/sshd_config",
-      "Disable password authentication — enforce SSH key-based login only",
-      "Change the default port from 22 to a non-standard port above 1024",
-      "Install and configure fail2ban to block brute-force attempts automatically",
-      "Restrict SSH access to specific IP addresses using firewall rules"
-    ],
-    "real_world_example": "CVE-2018-15473 — OpenSSH 7.7 username enumeration vulnerability exploited in targeted attacks"
-  },
   "21": {
     "service": "FTP — File Transfer Protocol",
     "why_open": "Allows file transfers between client and server over a network",
@@ -30,6 +14,22 @@
       "Audit all files accessible via FTP and remove sensitive data"
     ],
     "real_world_example": "CVE-2011-2523 — vsftpd 2.3.4 backdoor allowing remote command execution on port 6200"
+  },
+  "22": {
+    "service": "SSH — Secure Shell",
+    "why_open": "Provides encrypted remote access to the server for administrative tasks",
+    "who_uses": "System administrators, developers, and DevOps engineers for remote login",
+    "who_exploits": "Attackers using brute-force tools, credential stuffing, or stolen private keys",
+    "risk": "Full remote compromise of the system — attacker gains complete shell access",
+    "severity": "HIGH",
+    "how_to_fix": [
+      "Disable root login: set PermitRootLogin no in /etc/ssh/sshd_config",
+      "Disable password authentication — enforce SSH key-based login only",
+      "Change the default port from 22 to a non-standard port above 1024",
+      "Install and configure fail2ban to block brute-force attempts automatically",
+      "Restrict SSH access to specific IP addresses using firewall rules"
+    ],
+    "real_world_example": "CVE-2018-15473 — OpenSSH 7.7 username enumeration vulnerability exploited in targeted attacks"
   },
   "23": {
     "service": "Telnet — Unencrypted Remote Access",
@@ -62,6 +62,22 @@
     ],
     "real_world_example": "CVE-2020-7247 — OpenSMTPD remote code execution vulnerability allowing arbitrary command execution as root"
   },
+  "53": {
+    "service": "DNS — Domain Name System",
+    "why_open": "Resolves domain names to IP addresses for the network",
+    "who_uses": "DNS servers, resolvers, and any system providing name resolution services",
+    "who_exploits": "Attackers performing DNS amplification attacks, cache poisoning, and zone transfer abuse",
+    "risk": "DNS amplification can be used in large-scale DDoS attacks; cache poisoning can redirect users to malicious sites",
+    "severity": "HIGH",
+    "how_to_fix": [
+      "Disable recursive queries for external/untrusted clients",
+      "Restrict zone transfers (AXFR) to authorized secondary servers only",
+      "Implement DNSSEC to prevent cache poisoning and spoofing",
+      "Rate-limit DNS responses to prevent amplification attack abuse",
+      "Keep DNS server software (BIND, PowerDNS) updated to the latest version"
+    ],
+    "real_world_example": "CVE-2020-1350 — SIGRed, a wormable Windows DNS Server remote code execution vulnerability"
+  },
   "80": {
     "service": "HTTP — Hypertext Transfer Protocol",
     "why_open": "Web server serving unencrypted HTTP traffic on the standard web port",
@@ -77,6 +93,51 @@
       "Keep web server software (Apache, Nginx) updated to the latest stable version"
     ],
     "real_world_example": "CVE-2021-41773 — Apache HTTP Server 2.4.49 path traversal vulnerability enabling remote code execution"
+  },
+  "110": {
+    "service": "POP3 — Post Office Protocol v3",
+    "why_open": "Mail retrieval protocol allowing email clients to download messages from a server",
+    "who_uses": "Legacy email clients retrieving mail from a mailbox server",
+    "who_exploits": "Attackers sniffing cleartext credentials transmitted during the authentication handshake",
+    "risk": "Username and password are sent in plaintext unless wrapped in TLS — full credential exposure",
+    "severity": "HIGH",
+    "how_to_fix": [
+      "Disable plain POP3 and enforce POP3S (port 995) with TLS encryption",
+      "Require STARTTLS for all POP3 connections if port 110 must remain open",
+      "Migrate users to IMAP over TLS or modern protocols where possible",
+      "Monitor authentication logs for repeated failed login attempts"
+    ],
+    "real_world_example": "CVE-2020-12625 — Zimbra POP3 proxy vulnerability allowing credential exposure"
+  },
+  "139": {
+    "service": "NetBIOS — Network Basic Input Output System",
+    "why_open": "Legacy Windows protocol providing name resolution and session services for file sharing",
+    "who_uses": "Older Windows networks for file and printer sharing before SMB took over fully",
+    "who_exploits": "Attackers performing NetBIOS enumeration to gather usernames, shares, and network information",
+    "risk": "Information disclosure — attacker can enumerate shares, users, and system details to plan further attacks",
+    "severity": "MEDIUM",
+    "how_to_fix": [
+      "Disable NetBIOS over TCP/IP if not required for legacy compatibility",
+      "Block ports 137-139 at the network firewall from external access",
+      "Use modern SMB over port 445 with NetBIOS disabled where possible",
+      "Restrict NetBIOS access to trusted internal network segments only"
+    ],
+    "real_world_example": "CVE-2017-0144 — Related EternalBlue family vulnerability affecting NetBIOS/SMB stack on Windows"
+  },
+  "143": {
+    "service": "IMAP — Internet Message Access Protocol",
+    "why_open": "Mail retrieval protocol allowing clients to access and manage mailboxes on the server",
+    "who_uses": "Email clients accessing mail while keeping messages synchronized on the server",
+    "who_exploits": "Attackers intercepting cleartext credentials and session data when TLS is not enforced",
+    "risk": "Credentials and email content exposed in plaintext — full mailbox compromise possible via interception",
+    "severity": "HIGH",
+    "how_to_fix": [
+      "Disable plain IMAP and enforce IMAPS (port 993) with TLS encryption",
+      "Require STARTTLS for all IMAP connections if port 143 must remain open",
+      "Implement account lockout policies after repeated failed authentication attempts",
+      "Regularly audit mail server logs for unusual access patterns"
+    ],
+    "real_world_example": "CVE-2021-38371 — Dovecot IMAP server vulnerability allowing crafted requests to crash or compromise the service"
   },
   "443": {
     "service": "HTTPS — HTTP over TLS",
@@ -94,37 +155,21 @@
     ],
     "real_world_example": "CVE-2014-0160 — OpenSSL Heartbleed vulnerability exposing server memory contents including private keys"
   },
-  "3306": {
-    "service": "MySQL — Database Server",
-    "why_open": "MySQL database server accepting connections — potentially exposed to the network",
-    "who_uses": "Web applications, backend services, and database administrators",
-    "who_exploits": "Attackers attempting credential brute-force and direct database access from the internet",
-    "risk": "Direct database access from the network — complete data exfiltration, modification, or destruction",
+  "445": {
+    "service": "SMB — Server Message Block",
+    "why_open": "Windows file sharing and network communication protocol",
+    "who_uses": "Windows networks for file sharing, printer sharing, and inter-process communication",
+    "who_exploits": "Ransomware (WannaCry, NotPetya), worms, and attackers exploiting EternalBlue and related vulnerabilities",
+    "risk": "Wormable exploitation enabling lateral movement, ransomware deployment, and complete network compromise",
     "severity": "CRITICAL",
     "how_to_fix": [
-      "Bind MySQL to localhost only: set bind-address = 127.0.0.1 in my.cnf",
-      "Never expose port 3306 to the public internet under any circumstances",
-      "Use strong, unique passwords for all database accounts",
-      "Remove anonymous accounts and the test database immediately",
-      "Access the database remotely via SSH tunnel rather than direct port exposure"
+      "Block port 445 at the network perimeter — never expose SMB to the internet",
+      "Disable SMBv1 immediately: Set-SmbServerConfiguration -EnableSMB1Protocol $false",
+      "Apply MS17-010 patch if not already applied — eliminates EternalBlue attack vector",
+      "Require SMB signing to prevent man-in-the-middle attacks on internal networks",
+      "Segment the network to limit SMB exposure between untrusted hosts"
     ],
-    "real_world_example": "CVE-2012-2122 — MySQL authentication bypass allowing login with any password under certain conditions"
-  },
-  "5432": {
-    "service": "PostgreSQL — Database Server",
-    "why_open": "PostgreSQL database server accepting network connections",
-    "who_uses": "Web applications, data pipelines, and backend services requiring relational data storage",
-    "who_exploits": "Attackers targeting exposed database ports for credential attacks and direct data access",
-    "risk": "Full database compromise — all stored data accessible, modifiable, or deletable by an unauthorized party",
-    "severity": "CRITICAL",
-    "how_to_fix": [
-      "Restrict PostgreSQL to localhost: set listen_addresses = 'localhost' in postgresql.conf",
-      "Configure pg_hba.conf to reject all connections from non-local addresses",
-      "Use strong passwords for all PostgreSQL roles — enforce password policies",
-      "Never expose PostgreSQL directly to the internet — use SSH tunneling for remote access",
-      "Enable SSL for all PostgreSQL connections even on internal networks"
-    ],
-    "real_world_example": "CVE-2019-9193 — PostgreSQL COPY TO/FROM PROGRAM feature enabling arbitrary OS command execution"
+    "real_world_example": "CVE-2017-0144 — EternalBlue SMBv1 vulnerability exploited by WannaCry ransomware affecting 200,000+ systems globally"
   },
   "631": {
     "service": "IPP — Internet Printing Protocol (CUPS)",
@@ -140,6 +185,22 @@
       "Keep CUPS updated to the latest version to patch known vulnerabilities"
     ],
     "real_world_example": "CVE-2023-32360 — CUPS unauthorized access vulnerability allowing retrieval of sensitive information"
+  },
+  "3306": {
+    "service": "MySQL — Database Server",
+    "why_open": "MySQL database server accepting connections — potentially exposed to the network",
+    "who_uses": "Web applications, backend services, and database administrators",
+    "who_exploits": "Attackers attempting credential brute-force and direct database access from the internet",
+    "risk": "Direct database access from the network — complete data exfiltration, modification, or destruction",
+    "severity": "CRITICAL",
+    "how_to_fix": [
+      "Bind MySQL to localhost only: set bind-address = 127.0.0.1 in my.cnf",
+      "Never expose port 3306 to the public internet under any circumstances",
+      "Use strong, unique passwords for all database accounts",
+      "Remove anonymous accounts and the test database immediately",
+      "Access the database remotely via SSH tunnel rather than direct port exposure"
+    ],
+    "real_world_example": "CVE-2012-2122 — MySQL authentication bypass allowing login with any password under certain conditions"
   },
   "3389": {
     "service": "RDP — Remote Desktop Protocol",
@@ -157,21 +218,37 @@
     ],
     "real_world_example": "CVE-2019-0708 — BlueKeep, a wormable RDP vulnerability enabling unauthenticated remote code execution on Windows 7 and Server 2008"
   },
-  "445": {
-    "service": "SMB — Server Message Block",
-    "why_open": "Windows file sharing and network communication protocol",
-    "who_uses": "Windows networks for file sharing, printer sharing, and inter-process communication",
-    "who_exploits": "Ransomware (WannaCry, NotPetya), worms, and attackers exploiting EternalBlue and related vulnerabilities",
-    "risk": "Wormable exploitation enabling lateral movement, ransomware deployment, and complete network compromise",
+  "5432": {
+    "service": "PostgreSQL — Database Server",
+    "why_open": "PostgreSQL database server accepting network connections",
+    "who_uses": "Web applications, data pipelines, and backend services requiring relational data storage",
+    "who_exploits": "Attackers targeting exposed database ports for credential attacks and direct data access",
+    "risk": "Full database compromise — all stored data accessible, modifiable, or deletable by an unauthorized party",
     "severity": "CRITICAL",
     "how_to_fix": [
-      "Block port 445 at the network perimeter — never expose SMB to the internet",
-      "Disable SMBv1 immediately: Set-SmbServerConfiguration -EnableSMB1Protocol $false",
-      "Apply MS17-010 patch if not already applied — eliminates EternalBlue attack vector",
-      "Require SMB signing to prevent man-in-the-middle attacks on internal networks",
-      "Segment the network to limit SMB exposure between untrusted hosts"
+      "Restrict PostgreSQL to localhost: set listen_addresses = 'localhost' in postgresql.conf",
+      "Configure pg_hba.conf to reject all connections from non-local addresses",
+      "Use strong passwords for all PostgreSQL roles — enforce password policies",
+      "Never expose PostgreSQL directly to the internet — use SSH tunneling for remote access",
+      "Enable SSL for all PostgreSQL connections even on internal networks"
     ],
-    "real_world_example": "CVE-2017-0144 — EternalBlue SMBv1 vulnerability exploited by WannaCry ransomware affecting 200,000+ systems globally"
+    "real_world_example": "CVE-2019-9193 — PostgreSQL COPY TO/FROM PROGRAM feature enabling arbitrary OS command execution"
+  },
+  "5900": {
+    "service": "VNC — Virtual Network Computing",
+    "why_open": "Remote desktop sharing protocol providing graphical control over a remote system",
+    "who_uses": "IT support teams and administrators for remote desktop assistance and management",
+    "who_exploits": "Attackers exploiting weak or absent authentication to gain full graphical control of the target machine",
+    "risk": "Complete remote control of the desktop — often configured with weak or no authentication at all",
+    "severity": "CRITICAL",
+    "how_to_fix": [
+      "Never expose VNC directly to the internet — tunnel through SSH or a VPN",
+      "Enforce strong, unique passwords for all VNC sessions",
+      "Use VNC implementations that support TLS encryption (e.g., TigerVNC with TLS)",
+      "Restrict VNC access to specific trusted IP addresses via firewall rules",
+      "Disable VNC entirely when remote desktop access is not actively required"
+    ],
+    "real_world_example": "CVE-2019-15681 — RealVNC vulnerability allowing heap corruption and potential remote code execution"
   },
   "8080": {
     "service": "HTTP Alternate — Development or Proxy Web Server",
@@ -188,5 +265,21 @@
       "Apply the same security standards to development servers as production"
     ],
     "real_world_example": "CVE-2020-1938 — Apache Tomcat AJP connector vulnerability (Ghostcat) enabling file read and remote code execution"
+  },
+  "8443": {
+    "service": "HTTPS Alternate — Secure Development or Admin Interface",
+    "why_open": "Alternate HTTPS port commonly used for administrative web interfaces and development servers with TLS",
+    "who_uses": "Application servers, admin dashboards, and development environments requiring encrypted access",
+    "who_exploits": "Attackers scanning for exposed admin panels and management interfaces with default or weak credentials",
+    "risk": "Exposed admin interfaces can lead to full application or server compromise if default credentials remain unchanged",
+    "severity": "MEDIUM",
+    "how_to_fix": [
+      "Change all default credentials on admin interfaces immediately",
+      "Restrict access to port 8443 via firewall rules to trusted IP addresses only",
+      "Implement multi-factor authentication on administrative interfaces",
+      "Keep the underlying application server and TLS libraries updated",
+      "Use a Web Application Firewall (WAF) in front of admin interfaces where possible"
+    ],
+    "real_world_example": "CVE-2021-44228 — Log4Shell, frequently exploited via web admin interfaces running on alternate HTTPS ports"
   }
 }
