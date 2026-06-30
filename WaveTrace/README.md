@@ -16,6 +16,22 @@
 
 ---
 
+## 📸 Screenshots
+
+### Terminal UI — Interface Selection
+![WaveTrace Terminal UI](screenshots/terminal_ui_1.png)
+
+### Terminal UI — Live Packet Capture
+![WaveTrace Live Capture](screenshots/terminal_ui_2.png)
+
+### PDF Report — Page 1
+![WaveTrace PDF Report Page 1](screenshots/report_page1.png)
+
+### PDF Report — Page 2
+![WaveTrace PDF Report Page 2](screenshots/report_page2.png)
+
+---
+
 ## 🤔 The Problem WaveTrace Solves
 
 Wireshark is the industry-standard packet analyzer — and it is overwhelming for beginners.
@@ -206,6 +222,11 @@ WaveTrace/
 │   └── reporter.py       # Professional PDF generator
 ├── data/
 │   └── protocol_intel.json  # Protocol risk classification (planned)
+├── screenshots/
+│   ├── terminal_ui_1.png    # Interface selection preview
+│   ├── terminal_ui_2.png    # Live capture preview
+│   ├── report_page1.png     # PDF report page 1 preview
+│   └── report_page2.png     # PDF report page 2 preview
 ├── reports/               # Generated PDF reports
 ├── wavetrace.py           # CLI entry point
 ├── requirements.txt       # Python dependencies
@@ -217,7 +238,7 @@ WaveTrace/
 ## 📦 Dependencies
 
 ```
-pyshark         — TShark Python interface for packet capture
+pyshark         — Python interface for TShark packet capture
 scapy           — Low-level packet manipulation (planned features)
 reportlab       — Professional PDF generation
 rich            — Live terminal UI and tables
