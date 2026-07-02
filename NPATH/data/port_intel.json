@@ -188,5 +188,38 @@
       "Apply the same security standards to development servers as production"
     ],
     "real_world_example": "CVE-2020-1938 — Apache Tomcat AJP connector vulnerability (Ghostcat) enabling file read and remote code execution"
+  },
+"53": {
+  "service": "DNS — Domain Name System",
+  "why_open": "Resolves domain names to IP addresses for the network — commonly run by routers, DNS servers, or systems using dnsmasq/systemd-resolved",
+  "who_uses": "DNS resolvers, internal network name resolution, ISP/router-provided DNS services",
+  "who_exploits": "Attackers performing DNS cache poisoning, zone transfer abuse, or using open resolvers for DDoS amplification attacks",
+  "risk": "Open/misconfigured resolvers can be abused for DNS amplification DDoS attacks; cache poisoning can redirect users to malicious sites",
+  "severity": "MEDIUM",
+  "how_to_fix": [
+    "Disable recursive queries for external/untrusted clients — restrict to internal network only",
+    "If this is a router/local resolver, confirm it isn't reachable from outside your network",
+    "Disable zone transfers (AXFR) to unauthorized hosts if running an authoritative DNS server",
+    "Keep DNS software (BIND, dnsmasq, systemd-resolved) updated",
+    "Use DNSSEC where possible to prevent response spoofing"
+  ],
+  "real_world_example": "CVE-2020-1350 — SIGRed, a wormable Windows DNS Server remote code execution vulnerability"
+},
+  "161": {
+    "service": "SNMP — Simple Network Management Protocol",
+    "why_open": "Used for monitoring and managing network devices such as routers, switches, and servers",
+    "who_uses": "Network administrators and monitoring systems (e.g., Nagios, Zabbix) to collect device metrics",
+    "who_exploits": "Attackers exploiting default community strings or misconfigured SNMP services to gather sensitive information or perform attacks",
+    "risk": "Exposure of network topology, device configurations, and potential for unauthorized control of devices",
+    "severity": "HIGH",
+    "how_to_fix": [
+      "Change default community strings (e.g., 'public' and 'private') to strong, unique values",
+      "Restrict SNMP access to trusted IP addresses only via firewall rules",
+      "Use SNMPv3 which provides authentication and encryption instead of SNMPv1/v2c",
+      "Disable SNMP entirely if not required for network management",
+      "Regularly audit SNMP configurations and logs for unauthorized access attempts"
+    ],
+    "real_world_example": "CVE-2017-7921 — SNMP service vulnerability allowing remote attackers to gain sensitive information from affected devices"
   }
 }
+
