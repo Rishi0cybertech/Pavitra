@@ -171,26 +171,31 @@ def generate_report(stats: dict, output_file: str = "wavetrace_report.pdf"):
     story.append(Spacer(1, 0.2*inch))
 
     story.append(Paragraph("PROTOCOL BREAKDOWN", S["section"]))
-    PROTO_RISK = {
-        "DNS":    ("LOW",    C_SAFE,   C_SAFE_BG),
-        "TLS":    ("LOW",    C_SAFE,   C_SAFE_BG),
-        "TCP":    ("LOW",    C_SAFE,   C_SAFE_BG),
-        "HTTP":   ("MEDIUM", C_WARN,   C_WARN_BG),
-        "TELNET": ("HIGH",   C_DANGER, C_DANGER_BG),
-        "FTP":    ("HIGH",   C_DANGER, C_DANGER_BG),
-        "UDP":    ("LOW",    C_SAFE,   C_SAFE_BG),
-        "ICMP":   ("LOW",    C_SAFE,   C_SAFE_BG),
-    }
+
+    enriched = stats.get("enriched_protocols", {})
     total = max(stats.get("total", 1), 1)
+
+    SEVERITY_DISPLAY_COLOR = {
+        "CRITICAL": C_DANGER,
+        "HIGH":     C_DANGER,
+        "MEDIUM":   C_WARN,
+        "LOW":      C_SAFE,
+    }
+
     proto_header = [[
         Paragraph("PROTOCOL", S["key"]),
         Paragraph("PACKETS",  S["key"]),
         Paragraph("SHARE",    S["key"]),
         Paragraph("RISK",     S["key"]),
     ]]
+
     proto_rows = []
-    for proto, count in sorted(protocols.items(), key=lambda x: x[1], reverse=True):
-        risk, rc, rbg = PROTO_RISK.get(proto.upper(), ("UNKNOWN", C_SUBTEXT, C_MIST))
+    sorted_protos = sorted(enriched.items(), key=lambda x: x[1]["count"], reverse=True)
+
+    for proto, data in sorted_protos:
+        count = data["count"]
+        severity = data["intel"].get("severity", "MEDIUM")
+        color = SEVERITY_DISPLAY_COLOR.get(severity, C_SUBTEXT)
         share = f"{(count/total)*100:.1f}%"
         proto_rows.append([
             Paragraph(proto, ParagraphStyle(
@@ -198,10 +203,11 @@ def generate_report(stats: dict, output_file: str = "wavetrace_report.pdf"):
                 textColor=C_DARK, leading=13)),
             Paragraph(str(count), S["val"]),
             Paragraph(share,      S["val"]),
-            Paragraph(risk, ParagraphStyle(
+            Paragraph(severity, ParagraphStyle(
                 "R", fontName="Helvetica-Bold", fontSize=8,
-                textColor=rc, leading=13)),
+                textColor=color, leading=13)),
         ])
+
     pt = Table(proto_header + proto_rows,
                colWidths=[usable_width*0.3, usable_width*0.2,
                           usable_width*0.2,  usable_width*0.3])
@@ -216,6 +222,48 @@ def generate_report(stats: dict, output_file: str = "wavetrace_report.pdf"):
     ]))
     story.append(pt)
     story.append(Spacer(1, 0.2*inch))
+
+    story.append(Paragraph("PROTOCOL INTELLIGENCE", S["section"]))
+
+    for proto, data in sorted_protos:
+        intel = data["intel"]
+        severity = intel.get("severity", "MEDIUM")
+        color = SEVERITY_DISPLAY_COLOR.get(severity, C_SUBTEXT)
+
+        red_flags = intel.get("red_flags", ["No known red flags on file"])
+        flags_text = "".join([f"• {f}<br/>" for f in red_flags])
+
+        detail_rows = [
+            [Paragraph(f"{proto} — {intel.get('protocol_name', proto)}",
+                       ParagraphStyle("PH", fontName="Helvetica-Bold", fontSize=10,
+                                      textColor=C_WHITE, leading=14)),
+             ""],
+            [Paragraph("WHY SEEN", S["key"]),
+             Paragraph(intel.get("why_seen", "N/A"), S["val"])],
+            [Paragraph("WHO USES IT", S["key"]),
+             Paragraph(intel.get("who_uses", "N/A"), S["val"])],
+            [Paragraph("WHO EXPLOITS IT", S["key"]),
+             Paragraph(intel.get("who_exploits", "N/A"), S["val"])],
+            [Paragraph("RISK", S["key"]),
+             Paragraph(intel.get("risk", "N/A"), S["val"])],
+            [Paragraph("RED FLAGS TO WATCH", S["key"]),
+             Paragraph(flags_text, S["val"])],
+            [Paragraph("REAL WORLD EXAMPLE", S["key"]),
+             Paragraph(intel.get("real_world_example", "N/A"), S["val"])],
+        ]
+
+        dt = Table(detail_rows, colWidths=[usable_width*0.22, usable_width*0.78])
+        dt.setStyle(TableStyle([
+            ("BACKGROUND",     (0, 0), (-1, 0), color),
+            ("SPAN",           (0, 0), (-1, 0)),
+            ("BACKGROUND",     (0, 1), (0, -1), C_VIOLET),
+            ("TEXTCOLOR",      (0, 1), (0, -1), C_WHITE),
+            ("ROWBACKGROUNDS", (1, 1), (1, -1), [C_WHITE, C_MIST]),
+            ("GRID",           (0, 0), (-1, -1), 0.4, C_BORDER),
+            ("VALIGN",         (0, 0), (-1, -1), "TOP"),
+            ("PADDING",        (0, 0), (-1, -1), 8),
+        ]))
+        story.append(KeepTogether([dt, Spacer(1, 0.15*inch)]))
 
     if suspicious:
         story.append(Paragraph("SUSPICIOUS TRAFFIC DETECTED", S["section"]))
