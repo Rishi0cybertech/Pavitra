@@ -13,7 +13,11 @@ def load_intel():
         return {}
     return json.loads(path.read_text())
 
-def scan_target(target: str) -> dict:
+def scan_target(target: str) -> list:
+    """
+    Always returns a LIST of host dicts — even a single IP scan
+    returns a one-item list. Callers must not treat this as a dict.
+    """
     nm = nmap.PortScanner()
     intel = load_intel()
 
@@ -29,21 +33,23 @@ def scan_target(target: str) -> dict:
         TextColumn("[progress.description]{task.description}"),
         console=console,
     ) as progress:
-        task = progress.add_task("[cyan]Scanning target...", total=None)
+        task = progress.add_task("[cyan]Scanning target(s)...", total=None)
         nm.scan(hosts=target, arguments="-sV --open")
         progress.update(task, description="[green]Scan complete!")
 
-    host_data = {
-        "ip": target,
-        "hostname": "",
-        "state": "unknown",
-        "ports": []
-    }
+    all_hosts = []
+
+    if not nm.all_hosts():
+        console.print("[red]No hosts responded. Check target/permissions.[/red]")
+        return all_hosts
 
     for host in nm.all_hosts():
-        host_data["ip"]       = host
-        host_data["hostname"] = nm[host].hostname()
-        host_data["state"]    = nm[host].state()
+        host_data = {
+            "ip": host,
+            "hostname": nm[host].hostname(),
+            "state": nm[host].state(),
+            "ports": []
+        }
 
         console.print(f"\n[bold green]Host    :[/bold green] {host} ({nm[host].hostname()})")
         console.print(f"[bold green]State   :[/bold green] {nm[host].state()}\n")
@@ -65,10 +71,8 @@ def scan_target(target: str) -> dict:
 
                 severity = intel_data.get("severity", "MEDIUM")
                 severity_colors = {
-                    "CRITICAL": "red",
-                    "HIGH":     "orange1",
-                    "MEDIUM":   "yellow",
-                    "LOW":      "green"
+                    "CRITICAL": "red", "HIGH": "orange1",
+                    "MEDIUM": "yellow", "LOW": "green"
                 }
                 color = severity_colors.get(severity, "yellow")
 
@@ -88,4 +92,7 @@ def scan_target(target: str) -> dict:
                     "intel":    intel_data
                 })
 
-    return host_data
+        all_hosts.append(host_data)
+
+    console.print(f"\n[bold cyan]Total hosts scanned: {len(all_hosts)}[/bold cyan]\n")
+    return all_hosts
