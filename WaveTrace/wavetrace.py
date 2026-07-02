@@ -5,6 +5,7 @@ from rich.prompt import Prompt, IntPrompt
 from rich import box
 from core.capture import display_interfaces, capture_packets
 from core.reporter import generate_report
+from core.analyzer import enrich_protocols, calculate_session_risk
 from datetime import datetime
 
 console = Console()
@@ -51,7 +52,20 @@ def main():
     stats = capture_packets(interface=selected, packet_count=count)
     stats["interface"] = selected
 
+    # ── Analysis layer — this is what was missing ──────────────
+    stats["enriched_protocols"] = enrich_protocols(stats["protocols"])
+    stats["risk_analysis"] = calculate_session_risk(
+        stats["enriched_protocols"],
+        suspicious_count=len(stats.get("suspicious", []))
+    )
+
     console.print()
+    console.print(f"[bold cyan]Session Risk:[/bold cyan] "
+                   f"{stats['risk_analysis']['grade']} — "
+                   f"{stats['risk_analysis']['risk_level']} "
+                   f"({stats['risk_analysis']['score']}/100)")
+    console.print(f"[dim]{stats['risk_analysis']['summary']}[/dim]\n")
+
     make_report = Prompt.ask(
         "[bold yellow]Generate PDF report?[/bold yellow]",
         choices=["y", "n"],
