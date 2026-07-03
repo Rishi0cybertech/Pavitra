@@ -314,7 +314,7 @@ typer           — CLI interface
 
 ## 🗺️ Roadmap — What's Coming Next
 
-- [ ] Subnet scanning — `python3 npath.py scan 192.168.1.0/24 --report`
+- [X] Subnet scanning — `python3 npath.py scan 192.168.1.0/24 --report`
 - [ ] OS detection section in report
 - [ ] HTML report export option
 - [ ] Auto-update CVE database from NVD API
