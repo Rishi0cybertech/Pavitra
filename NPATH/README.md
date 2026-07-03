@@ -241,7 +241,7 @@ NPATH/
 
 NPath maintains a `port_intel.json` database — the brain of the tool.
 
-Current coverage — **18 ports with real CVE references:**
+Current coverage — **21 ports with real CVE references:**
 
 | Port | Service | Severity |
 |------|---------|----------|
@@ -263,7 +263,8 @@ Current coverage — **18 ports with real CVE references:**
 | 5900 | VNC — Virtual Network Computing | 🔴 CRITICAL |
 | 8080 | HTTP Alternate — Development/Proxy Server | 🟡 MEDIUM |
 | 8443 | HTTPS Alternate — Secure Admin Interface | 🟡 MEDIUM |
-
+| 2121 | Alternative FTP — Custom File Transfer Service | 🟡 MEDIUM |
+| 2222 | Alternative SSH — Secure Remote Administration | 🔴 CRITICAL |
 > Database actively expanding — contributions welcome.
 
 ### Database Schema
@@ -309,12 +310,12 @@ typer           — CLI interface
 - [x] Company-grade professional PDF layout
 - [x] Risk scoring engine — grade A to F
 - [x] Port prioritization — critical ports first
+- [X] Subnet scanning — `python3 npath.py scan 192.168.1.0/24 --report`
 
 ---
 
 ## 🗺️ Roadmap — What's Coming Next
 
-- [X] Subnet scanning — `python3 npath.py scan 192.168.1.0/24 --report`
 - [ ] OS detection section in report
 - [ ] HTML report export option
 - [ ] Auto-update CVE database from NVD API
