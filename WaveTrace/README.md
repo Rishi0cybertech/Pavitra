@@ -259,13 +259,12 @@ psutil          — Network interface detection
 - [x] Full packet capture log in report
 - [x] Educational reference section in PDF
 - [x] Distinct visual identity from NPath (purple/teal theme)
-
+- [X] `protocol_intel.json` — full protocol knowledge database with CVEs
 ---
 
 ## 🗺️ Roadmap — What's Coming Next
 
 ### Phase 2 — Deeper Analysis
-- [ ] `protocol_intel.json` — full protocol knowledge database with CVEs
 - [ ] HTTP/HTTPS payload inspection (where legally permitted)
 - [ ] Bandwidth usage graphs per source IP
 - [ ] Top talkers visualization (who is using the most data)
