@@ -281,5 +281,57 @@
       "Use a Web Application Firewall (WAF) in front of admin interfaces where possible"
     ],
     "real_world_example": "CVE-2021-44228 — Log4Shell, frequently exploited via web admin interfaces running on alternate HTTPS ports"
+  },
+  "161": {
+    "service": "SNMP — Simple Network Management Protocol",
+    "why_open": "Used for monitoring and managing network devices such as routers, switches, and servers",
+    "who_uses": "Network administrators and monitoring systems (e.g., Nagios, Zabbix) to collect device metrics",
+    "who_exploits": "Attackers exploiting default community strings or misconfigured SNMP services to gather sensitive information or perform attacks",
+    "risk": "Exposure of network topology, device configurations, and potential for unauthorized control of devices",
+    "severity": "HIGH",
+    "how_to_fix": [
+      "Change default community strings (e.g., 'public' and 'private') to strong, unique values",
+      "Restrict SNMP access to trusted IP addresses only via firewall rules",
+      "Use SNMPv3 which provides authentication and encryption instead of SNMPv1/v2c",
+      "Disable SNMP entirely if not required for network management",
+      "Regularly audit SNMP configurations and logs for unauthorized access attempts"
+    ],
+    "real_world_example": "CVE-2017-7921 — SNMP service vulnerability allowing remote attackers to gain sensitive information from affected devices"
+  },
+  "2121": {
+    "service": "Alternative FTP / FTP Proxy / Custom File Transfer Service",
+    "why_open": "Commonly used as an alternative FTP control port to avoid conflicts with the default FTP port (21) or to run multiple FTP services",
+    "who_uses": "System administrators, FTP servers (e.g., ProFTPD, vsftpd), embedded devices, NAS systems, and application-specific file transfer services",
+    "who_exploits": "Attackers scanning for exposed FTP services, weak credentials, anonymous login, directory traversal, or vulnerable FTP server software",
+    "risk": "Unauthorized file access, credential theft, malware upload, data exfiltration, and potential remote code execution if the FTP service is vulnerable",
+    "severity": "MEDIUM",
+    "how_to_fix": [
+      "Disable anonymous FTP access unless absolutely required",
+      "Use strong authentication and unique passwords",
+      "Prefer SFTP or FTPS instead of plain FTP for encrypted communication",
+      "Restrict access to trusted IP addresses using firewall rules",
+      "Keep FTP server software updated with the latest security patches",
+      "Disable the service if it is no longer required",
+      "Monitor FTP logs for suspicious login attempts and file operations"
+    ],
+    "real_world_example": "Many internet-exposed FTP servers running on alternative ports such as 2121 have been compromised through weak credentials and anonymous access, allowing attackers to steal or upload malicious files."
+  },
+  "2222": {
+    "service": "Alternative SSH (Secure Shell)",
+    "why_open": "Used as an alternative SSH port for secure remote administration, automation, file transfers, or to reduce automated scanning on the default SSH port (22)",
+    "who_uses": "System administrators, DevOps engineers, cloud servers, Linux administrators, developers, and automation tools using SSH or SFTP",
+    "who_exploits": "Attackers performing brute-force attacks, exploiting weak passwords, stolen SSH keys, or vulnerabilities in outdated SSH implementations",
+    "risk": "Unauthorized remote access, privilege escalation, data theft, lateral movement within the network, and complete server compromise if credentials are obtained",
+    "severity": "HIGH",
+    "how_to_fix": [
+      "Disable password authentication and use SSH key-based authentication",
+      "Disable direct root login (PermitRootLogin no)",
+      "Restrict SSH access to trusted IP addresses using firewall rules",
+      "Enable multi-factor authentication (MFA) where possible",
+      "Use fail2ban or similar tools to block repeated login attempts",
+      "Keep the SSH server updated with the latest security patches",
+      "Monitor SSH logs regularly for unauthorized access attempts"
+    ],
+    "real_world_example": "Numerous ransomware groups and botnets continuously scan alternative SSH ports such as 2222 to identify exposed servers and perform brute-force attacks against weak credentials."
   }
 }
