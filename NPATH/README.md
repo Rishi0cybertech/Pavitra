@@ -230,6 +230,7 @@ NPATH/
 
 ## ✅ Shipped
 
+```
 │   ├── terminal_ui.png   # Terminal scan UI preview
 │   ├── report_page1.png  # PDF report page 1 preview
 │   └── report_page2.png  # PDF report page 2 preview
