@@ -229,7 +229,92 @@ NPATH/
 ---
 
 ## ✅ Shipped
+=======
+│   ├── terminal_ui.png   # Terminal scan UI preview
+│   ├── report_page1.png  # PDF report page 1 preview
+│   └── report_page2.png  # PDF report page 2 preview
+├── npath.py              # ✅ Working CLI entry point
+├── test_report.py        # Direct scan + PDF script
+├── requirements.txt      # Python dependencies
+└── README.md
+```
 
+---
+
+## 🗄️ Port Intelligence Database
+
+NPath maintains a `port_intel.json` database — the brain of the tool.
+
+Current coverage — **21 ports with real CVE references:**
+
+| Port | Service | Severity |
+|------|---------|----------|
+| 21 | FTP — File Transfer Protocol | 🔴 CRITICAL |
+| 22 | SSH — Secure Shell | 🟠 HIGH |
+| 23 | Telnet — Unencrypted Remote Access | 🔴 CRITICAL |
+| 25 | SMTP — Simple Mail Transfer Protocol | 🟠 HIGH |
+| 53 | DNS — Domain Name System | 🟠 HIGH |
+| 80 | HTTP — Hypertext Transfer Protocol | 🟡 MEDIUM |
+| 110 | POP3 — Post Office Protocol v3 | 🟠 HIGH |
+| 139 | NetBIOS — Network Basic Input Output System | 🟡 MEDIUM |
+| 143 | IMAP — Internet Message Access Protocol | 🟠 HIGH |
+| 443 | HTTPS — HTTP over TLS | 🟢 LOW |
+| 445 | SMB — Server Message Block | 🔴 CRITICAL |
+| 631 | IPP — Internet Printing Protocol (CUPS) | 🟢 LOW |
+| 3306 | MySQL — Database Server | 🔴 CRITICAL |
+| 3389 | RDP — Remote Desktop Protocol | 🔴 CRITICAL |
+| 5432 | PostgreSQL — Database Server | 🔴 CRITICAL |
+| 5900 | VNC — Virtual Network Computing | 🔴 CRITICAL |
+| 8080 | HTTP Alternate — Development/Proxy Server | 🟡 MEDIUM |
+| 8443 | HTTPS Alternate — Secure Admin Interface | 🟡 MEDIUM |
+| 2121 | Alternative FTP — Custom File Transfer Service | 🟡 MEDIUM |
+| 2222 | Alternative SSH — Secure Remote Administration | 🔴 CRITICAL |
+> Database actively expanding — contributions welcome.
+
+### Database Schema
+```json
+{
+  "PORT_NUMBER": {
+    "service": "Service name",
+    "why_open": "Why this port runs",
+    "who_uses": "Legitimate users",
+    "who_exploits": "Attack vectors",
+    "risk": "Impact if compromised",
+    "severity": "LOW | MEDIUM | HIGH | CRITICAL",
+    "how_to_fix": ["Step 1", "Step 2", "Step 3"],
+    "real_world_example": "CVE reference"
+  }
+}
+```
+
+---
+
+## 📦 Dependencies
+
+```
+python-nmap     — NMAP Python interface
+reportlab       — Professional PDF generation
+rich            — Beautiful terminal output
+typer           — CLI interface
+```
+
+---
+
+## ✅ Completed So Far
+
+- [x] Core scanner with NMAP wrapper
+- [x] Professional PDF report generation
+- [x] Severity color coding (CRITICAL / HIGH / MEDIUM / LOW)
+- [x] Real-time terminal UI with rich
+- [x] Port intelligence database with real CVEs
+- [x] Learning section in PDF — teaches NMAP concepts
+- [x] Unique timestamped PDF per scan
+- [x] Working CLI — `python3 npath.py scan <target> --report`
+- [x] Port intel database expanded to 18 ports
+- [x] Company-grade professional PDF layout
+- [x] Risk scoring engine — grade A to F
+- [x] Port prioritization — critical ports first
+- [X] Subnet scanning — `python3 npath.py scan 192.168.1.0/24 --report
 - [x] NMAP integration with real-time Rich terminal UI
 - [x] Company-grade PDF reports — navy/steel palette, zero cheap templates
 - [x] 19-port intelligence database with real CVE references
@@ -239,12 +324,16 @@ NPATH/
 - [x] Educational reference section baked into every report
 
 ## 🔭 Next
-
 - [ ] Port intel expanded past 19
 - [ ] OS detection integrated into reports
 - [ ] HTML export alongside PDF
 - [ ] Auto-sync CVE data from the NVD API
-- [ ] Cross-reference with **WaveTrace** — Pavitra's live packet analyzer
+- [ ] Cross-reference with **WaveTrace** — Pavitra's live packet analyze
+- [ ] OS detection section in report
+- [ ] HTML report export option
+- [ ] Auto-update CVE database from NVD API
+- [ ] Integration with WaveTrace — cross-reference open ports with live traffic
+- [ ] DRISHTI AI integration — Hindi + English explanations
 
 ---
 

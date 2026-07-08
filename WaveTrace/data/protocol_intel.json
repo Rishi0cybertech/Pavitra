@@ -1,0 +1,138 @@
+{
+  "DNS": {
+    "protocol_name": "DNS — Domain Name System",
+    "why_seen": "Resolves domain names to IP addresses. Nearly every internet action starts with a DNS query.",
+    "who_uses": "Every device on the network doing normal browsing, app usage, or system updates",
+    "who_exploits": "Attackers performing DNS tunneling for data exfiltration, or DNS spoofing to redirect traffic",
+    "risk": "Individually low risk, but DNS tunneling can smuggle data past firewalls disguised as normal queries",
+    "severity": "LOW",
+    "red_flags": [
+      "Unusually long domain names (40+ characters) — possible DNS tunneling",
+      "High frequency of queries to a single unfamiliar domain",
+      "Queries to known malicious domains or DGA-pattern domains"
+    ],
+    "real_world_example": "APT groups have used DNS tunneling (e.g., DNSMessenger) to exfiltrate data while evading traditional firewall detection"
+  },
+  "TLS": {
+    "protocol_name": "TLS — Transport Layer Security",
+    "why_seen": "Encrypted communication — the foundation of HTTPS. Browsers, apps, and OS services all use it constantly.",
+    "who_uses": "Any application making a secure connection — web browsers, cloud sync, messaging apps",
+    "who_exploits": "Attackers cannot read TLS content directly, but weak/outdated TLS versions can be downgraded or exploited",
+    "risk": "TLS 1.0/1.1 or weak cipher suites can be vulnerable to downgrade attacks like POODLE or BEAST",
+    "severity": "LOW",
+    "red_flags": [
+      "TLS handshake using version 1.0 or 1.1 instead of 1.2/1.3",
+      "Self-signed or expired certificates in the handshake",
+      "Unusually large volume of TLS traffic to an unfamiliar IP"
+    ],
+    "real_world_example": "CVE-2014-3566 — POODLE attack exploiting SSLv3 fallback to decrypt secure communications"
+  },
+  "TCP": {
+    "protocol_name": "TCP — Transmission Control Protocol",
+    "why_seen": "Foundation of most internet communication — establishes reliable, ordered connections",
+    "who_uses": "Nearly all application-layer protocols (HTTP, HTTPS, SSH, FTP) run on top of TCP",
+    "who_exploits": "Attackers performing port scans, SYN floods, or connection hijacking",
+    "risk": "A high volume of SYN packets without completed handshakes can indicate a port scan or SYN flood attack",
+    "severity": "LOW",
+    "red_flags": [
+      "Many SYN packets to sequential ports from the same source — port scanning behavior",
+      "Repeated connection resets (RST) — possible firewall evasion attempt",
+      "Half-open connections in large volume — potential SYN flood"
+    ],
+    "real_world_example": "SYN flood attacks (a classic DoS technique) exploit TCP's three-way handshake by never completing it, exhausting server resources"
+  },
+  "HTTP": {
+    "protocol_name": "HTTP — Hypertext Transfer Protocol",
+    "why_seen": "Unencrypted web traffic — legacy or misconfigured web services still using plain HTTP",
+    "who_uses": "Older websites, internal tools, IoT devices, or misconfigured servers that haven't enabled HTTPS",
+    "who_exploits": "Attackers performing man-in-the-middle attacks to read or inject content into unencrypted traffic",
+    "risk": "All data — including credentials if submitted via forms — is visible in plaintext to anyone on the network path",
+    "severity": "MEDIUM",
+    "red_flags": [
+      "Login forms or credential submission over HTTP instead of HTTPS",
+      "Sensitive data (session cookies, tokens) visible in plaintext headers",
+      "Unexpected HTTP traffic to unfamiliar external IPs"
+    ],
+    "real_world_example": "Firesheep (2010) demonstrated trivial session hijacking over public WiFi by sniffing unencrypted HTTP cookies"
+  },
+  "TELNET": {
+    "protocol_name": "Telnet — Unencrypted Remote Access",
+    "why_seen": "Legacy remote login protocol — should not appear on any modern, properly secured network",
+    "who_uses": "Outdated network equipment, legacy embedded systems, misconfigured devices",
+    "who_exploits": "Attackers sniffing the network can read usernames and passwords directly — no decryption needed",
+    "risk": "Complete credential exposure in plaintext — anyone capturing this traffic sees the password immediately",
+    "severity": "CRITICAL",
+    "red_flags": [
+      "Any Telnet traffic at all on a modern network is itself the red flag",
+      "Login prompts or credential strings visible directly in packet payload"
+    ],
+    "real_world_example": "The Mirai botnet (2016) primarily spread by scanning the internet for devices with open Telnet and default credentials"
+  },
+  "FTP": {
+    "protocol_name": "FTP — File Transfer Protocol",
+    "why_seen": "Unencrypted file transfer — legacy protocol still used by some web hosting and internal tools",
+    "who_uses": "Legacy systems, some web developers still uploading via FTP instead of SFTP",
+    "who_exploits": "Attackers sniffing credentials and file contents transmitted in plaintext",
+    "risk": "Username, password, and all transferred file contents are visible to anyone capturing the traffic",
+    "severity": "HIGH",
+    "red_flags": [
+      "USER/PASS commands visible in plaintext in the packet payload",
+      "Large file transfers over FTP instead of encrypted alternatives"
+    ],
+    "real_world_example": "CVE-2011-2523 — vsftpd 2.3.4 backdoor, widely exploited due to FTP's continued use on internet-facing servers"
+  },
+  "UDP": {
+    "protocol_name": "UDP — User Datagram Protocol",
+    "why_seen": "Connectionless protocol used for speed-priority traffic — DNS, streaming, gaming, VoIP",
+    "who_uses": "DNS queries, video streaming, online gaming, VoIP calls",
+    "who_exploits": "Attackers using UDP for amplification DDoS attacks (DNS, NTP, memcached amplification)",
+    "risk": "No handshake means source IPs are easily spoofed — heavily abused in reflection/amplification DDoS attacks",
+    "severity": "LOW",
+    "red_flags": [
+      "Large volume of small UDP packets to a single destination — possible amplification attack source",
+      "UDP traffic on unusual high ports with no clear application"
+    ],
+    "real_world_example": "The 2018 GitHub DDoS attack used memcached UDP amplification to generate 1.35 Tbps of traffic"
+  },
+  "ICMP": {
+    "protocol_name": "ICMP — Internet Control Message Protocol",
+    "why_seen": "Network diagnostic protocol — used by ping, traceroute, and error reporting between devices",
+    "who_uses": "Network administrators troubleshooting connectivity; operating systems reporting network errors",
+    "who_exploits": "Attackers using ICMP tunneling to exfiltrate data, or ICMP flood for denial-of-service",
+    "risk": "ICMP tunneling can smuggle data past firewalls that don't inspect ICMP payload content",
+    "severity": "LOW",
+    "red_flags": [
+      "Unusually large ICMP packet payloads — standard ping packets are small",
+      "High-frequency ICMP traffic — possible ICMP flood (Ping of Death variant)",
+      "ICMP traffic carrying non-standard payload patterns"
+    ],
+    "real_world_example": "Loki ICMP tunneling tool has been used historically to covertly exfiltrate data through firewalls that permit ICMP"
+  },
+ "NTP": {
+  "protocol_name": "NTP — Network Time Protocol",
+  "why_seen": "Synchronizes your system clock with time servers. Almost every device does this automatically in the background.",
+  "who_uses": "Operating systems and applications keeping accurate time — routers, laptops, phones, servers",
+  "who_exploits": "Attackers using NTP servers for amplification DDoS attacks — small request, massive response sent to a spoofed victim",
+  "risk": "Individually harmless, but misconfigured open NTP servers are heavily abused as DDoS amplification vectors",
+  "severity": "LOW",
+  "red_flags": [
+    "NTP responses far larger than requests — classic amplification pattern",
+    "Same device sending MONLIST-style queries to many external NTP servers"
+  ],
+  "real_world_example": "2014 saw record-breaking NTP amplification DDoS attacks exceeding 400 Gbps, exploiting the monlist command in older NTP implementations"
+},
+"ARP": {
+  "protocol_name": "ARP — Address Resolution Protocol",
+  "why_seen": "Maps IP addresses to MAC addresses on the local network. No IP layer involved — this is why source/destination show as N/A, ARP operates below IP.",
+  "who_uses": "Every device on a local network, constantly, to know which physical device owns which IP",
+  "who_exploits": "Attackers performing ARP spoofing/poisoning to redirect traffic through their own machine — classic man-in-the-middle setup",
+  "risk": "ARP has no authentication built in — any device can claim to own any IP on the local segment, enabling traffic interception",
+  "severity": "MEDIUM",
+  "red_flags": [
+    "Duplicate or conflicting ARP replies for the same IP from different MAC addresses",
+    "Unusually high volume of ARP requests/replies — possible ARP flood or spoofing attempt",
+    "Gateway MAC address changing unexpectedly"
+  ],
+  "real_world_example": "ARP spoofing is the foundation of tools like Ettercap and Bettercap, used to intercept traffic on local networks via man-in-the-middle attacks"
+}
+} 
