@@ -271,6 +271,13 @@ Current coverage — **21 ports with real CVE references:**
 | 2121 | Alternative FTP — Custom File Transfer Service | 🟡 MEDIUM |
 | 2222 | Alternative SSH — Secure Remote Administration | 🔴 CRITICAL |
 > Database actively expanding — contributions welcome.
+```
+🧹 A Note on Data Integrity
+
+Earlier builds of NPath temporarily listed ports 2121 and 2222 in the intelligence database as "Alternative FTP" and "Alternative SSH." These were removed on purpose — they were leftover from internal Docker testing (host-mapped ports used to verify multi-host subnet scanning), not real standardized services worth documenting for end users.
+
+If NPath sees an open port that isn't in its database, it now correctly falls back to a generic "no data available" entry instead of a fabricated one. That's the honest behavior for unknown ports — and the reason this database only grows when a port earns a real, CVE-backed entry.
+```
 
 ### Database Schema
 ```json
